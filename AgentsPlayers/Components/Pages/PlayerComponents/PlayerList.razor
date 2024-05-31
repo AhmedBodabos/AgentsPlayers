@@ -1,0 +1,95 @@
+﻿@page "/Players"
+@rendermode InteractiveServer
+
+@using AgentsPlayers.Domain.Entities
+@using AgentsPlayers.ServicesInterfaces
+
+<h3>Players</h3>
+
+<button class="btn btn-primary" @onclick="ShowAddModal">Add New Player</button>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Date Of Birth</th>
+            <th>Nationality</th>
+            <th>Position</th>
+            <th>Height</th>
+            <th>Weight</th>
+            <th>Market Value</th>
+            <th>Preferred Foot</th>
+            <th>Contract Expiration Date</th>
+            <th>Current Club</th>
+            <th>Agent</th>
+            <th>Awards And Achievements</th>
+            <th>Health Status</th>
+            <th>Languages</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var player in players)
+        {
+            <tr>
+                <td>@player.FullName</td>
+                <td>@player.DateOfBirth</td>
+                <td>@player.Nationality</td>
+                <td>@player.Position</td>
+                <td>@player.Height</td>
+                <td>@player.Weight</td>
+                <td>@player.MarketValue</td>
+                <td>@player.PreferredFoot</td>
+                <td>@player.ContractExpirationDate</td>
+                <td>@player.CurrentClub</td>
+                <td>@player.Agent</td>
+                <td>@player.AwardsAndAchievements</td>
+                <td>@player.HealthStatus</td>
+                <td>@player.Languages</td>
+                <td>
+                    <button class="btn btn-secondary" @onclick="() => ShowEditModal(player)">Edit</button>
+                    <button class="btn btn-danger" @onclick="() => DeletePlayer(player)">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<AddEditPlayerModal @ref="addEditPlayerModal" OnSave="RefreshList" />
+
+@code {
+    [Inject] IPlayerService PlayerService { get; set; }
+
+    private List<Player> players;
+    private AddEditPlayerModal addEditPlayerModal;
+
+    protected override void OnInitialized()
+    {
+        LoadPlayers();
+    }
+
+    private void LoadPlayers()
+    {
+        players = PlayerService.GetList(string.Empty);
+    }
+
+    private void ShowAddModal()
+    {
+        addEditPlayerModal.Show(new Player());
+    }
+
+    private void ShowEditModal(Player player)
+    {
+        addEditPlayerModal.Show(player);
+    }
+
+    private void DeletePlayer(Player player)
+    {
+       PlayerService.Delete(player);
+        LoadPlayers();
+    }
+
+    private void RefreshList()
+    {
+        LoadPlayers();
+    }
+}

@@ -1,0 +1,122 @@
+﻿@using AgentsPlayers.Domain.Entities
+@using AgentsPlayers.ServicesInterfaces
+
+@if (isVisible)
+{
+    <div class="modal show" tabindex="-1" style="display: block;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@((player.Id == 0) ? "Add Player" : "Edit Player")</h5>
+                    <button type="button" class="btn-close" aria-label="Close" @onclick="Cancel"></button>
+                </div>   
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="FullName" class="form-label">full name</label>
+                        <input type="text" class="form-control" id="title" @bind="player.FullName">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="DateOfBirth" class="form-label">date of birth</label>
+                        <input type="date" class="form-control" id="isbn" @bind="player.DateOfBirth">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Nationality" class="form-label">Nationality</label>
+                        <input type="text" class="form-control" id="Nationality" @bind="player.Nationality">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Position" class="form-label">Position</label>
+                        <input type="text" class="form-control" id="Position" @bind="player.Position">
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label for="Height" class="form-label">Height</label>
+                        <input type="text" class="form-control" id="Height" @bind="player.Height">
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label for="Weight" class="form-label">Weight</label>
+                        <input type="text" class="form-control" id="Weight" @bind="player.Weight">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="MarketValue" class="form-label">MarketValue</label>
+                        <input type="text" class="form-control" id="MarketValue" @bind="player.MarketValue">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="PreferredFoot" class="form-label">PreferredFoot</label>
+                        <input type="text" class="form-control" id="PreferredFoot" @bind="player.PreferredFoot">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="ContractExpirationDate" class="form-label">Contract Expiration Date</label>
+                        <input type="date" class="form-control" id="ContractExpirationDate" @bind="player.ContractExpirationDate">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="CurrentClub" class="form-label">CurrentClub</label>
+                        <input type="text" class="form-control" id="CurrentClub" @bind="player.CurrentClub">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="AwardsAndAchievements" class="form-label">AwardsAndAchievements</label>
+                        <input type="text" class="form-control" id="AwardsAndAchievements" @bind="player.AwardsAndAchievements">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="HealthStatus" class="form-label">HealthStatus</label>
+                        <input type="text" class="form-control" id="HealthStatus" @bind="player.HealthStatus">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Languages" class="form-label">Languages</label>
+                        <input type="text" class="form-control" id="Languages" @bind="player.Languages">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+                    <button type="button" class="btn btn-primary" @onclick="Save">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+@code {
+    
+    [Parameter] public EventCallback OnSave { get; set; }
+        [Inject] public IPlayerService PlayerService { get; set; }
+    
+    private bool isVisible;
+    private Player player = new();
+    public void Show(Player player)
+    {
+        this.player = player;
+        isVisible = true;
+    }
+
+    private void Save()
+    {
+        if (player.Id == 0)
+        {
+            PlayerService.Save(player);
+        }
+        else
+        {
+            PlayerService.Update(player);
+        }
+
+        isVisible = false;
+        OnSave.InvokeAsync();
+    }
+
+    private void Cancel()
+    {
+        isVisible = false;
+    }
+}
