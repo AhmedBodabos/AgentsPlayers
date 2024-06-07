@@ -9,19 +9,19 @@ namespace AgentsPlayers.Services
     {
         private readonly IDbContextFactory<AgentsPlayersContext> _contextFactory = contextFactory;
 
-        public void Save(Agent agent)
+        public async Task Save(Agent agent)
         {
             using var db = _contextFactory.CreateDbContext();
             var tmp = db.Agents.FirstOrDefault(x => x.Id == agent.Id);
             if (tmp == null)
             {
                 db.Agents.Add(agent);
-                db.SaveChanges();
+               await db.SaveChangesAsync();
             }
 
         }
 
-        public void Update(Agent agent)
+        public async Task Update(Agent agent)
         {
             using var db = (_contextFactory.CreateDbContext());
 
@@ -35,11 +35,11 @@ namespace AgentsPlayers.Services
                 tmp.RepresentedPlayers = agent.RepresentedPlayers;
 
 
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
         }
 
-        public void Delete(Agent agent)
+        public async Task Delete(Agent agent)
         {
             using var db = _contextFactory.CreateDbContext();
 
@@ -47,25 +47,25 @@ namespace AgentsPlayers.Services
             if (tmp != null)
             {
                 db.Agents.Remove(tmp);
-                db.SaveChanges();
+               await db.SaveChangesAsync();
             }
         }
 
-        public Agent Get(int id)
+        public async Task <Agent> Get(int id)
         {
             using var db = _contextFactory.CreateDbContext();
 
-            var agent = db.Agents.FirstOrDefault(x => x.Id == id);
+            var agent =await db.Agents.FirstOrDefaultAsync(x => x.Id == id);
             return agent;
         }
 
 
-        public List<Agent> GetList(string FullName)
+        public async Task <List<Agent>> GetList(string FullName)
         {
             using var db = _contextFactory.CreateDbContext();
 
             var agents = db.Agents.Where(x => x.FullName.Contains(FullName));
-            return [.. agents];
+            return [..await agents.ToListAsync()];
         }
     }
 }

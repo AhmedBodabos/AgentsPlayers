@@ -4,10 +4,10 @@ namespace AgentsPlayers.ServicesInterfaces
 {
     public interface IAgentService
     {
-        void Delete(Agent agentr);
-        Agent Get(int id);
-        List<Agent> GetList(string FullName);
-        void Save(Agent agent);
-        void Update(Agent agent);
+        Task Delete(Agent agentr);
+        Task <Agent> Get(int id);
+        Task <List<Agent>> GetList(string FullName);
+        Task Save(Agent agent);
+        Task Update(Agent agent);
     }
 }
