@@ -1,0 +1,83 @@
+﻿@page "/Players"
+@rendermode InteractiveServer
+
+@using AgentsPlayers.Domain.Entities
+@using AgentsPlayers.ServicesInterfaces
+
+<h3>Players</h3>
+
+<div style="float:inline-end">
+<FluentButton Appearance="Appearance.Accent" @onclick="ShowAddModal">Add New Player</FluentButton>
+</div>
+<br />
+@if (players == null)
+{
+    <span>Loading...</span>
+}
+
+else
+{
+      <FluentDataGrid Items="@players"> 
+        <PropertyColumn Property="@(p=>p.FullName)" Sortable="true" />
+        <PropertyColumn Property="@(p=>p.DateOfBirth)" Sortable="true" />
+        <PropertyColumn Property="@(p=>p.Nationality)" Sortable="true" />
+        <PropertyColumn Property="@(p=>p.Position)" Sortable="true" />
+        <PropertyColumn Property="@(p=>p.Position)" Sortable="true" />
+        <PropertyColumn Property="@(p=>p.Height)" Sortable="true" />
+        <PropertyColumn Property="@(p=>p.Weight)" Sortable="true" />
+        <PropertyColumn Property="@(p=>p.MarketValue)" Sortable="true" />
+        <PropertyColumn Property="@(p=>p.PreferredFoot)" Sortable="true" />
+        <PropertyColumn Property="@(p=>p.ContractExpirationDate)" Sortable="true" />
+        <PropertyColumn Property="@(p=>p.CurrentClub)" Sortable="true" />
+        <PropertyColumn Property="@(p=>p.Agent)" Sortable="true" />
+        <PropertyColumn Property="@(p=>p.AwardsAndAchievements)" Sortable="true" />
+        <PropertyColumn Property="@(p=>p.HealthStatus)" Sortable="true" />
+        <PropertyColumn Property="@(p=>p.Languages)" Sortable="true" />
+             <TemplateColumn Title="Actions" Align="@Align.End">
+        <FluentButton aria-label="Edit item" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => ShowEditModal(context))" />
+        <FluentButton aria-label="Delete item" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => DeletePlayer(context))" />
+       
+        </TemplateColumn>
+
+    </FluentDataGrid>
+
+}
+@* <AddEditPlayerModal @ref="addEditPlayerModal" OnSave="RefreshList" /> *@
+
+@code {
+    [Inject] IPlayerService PlayerService { get; set; }
+
+    private IQueryable<Player> players;
+    //private AddEditPlayerModal addEditPlayerModal;
+
+    protected override void OnInitialized()
+    {
+        LoadPlayers();
+    }
+
+    private async Task LoadPlayers()
+    {
+        players = (await PlayerService.GetAll()).AsQueryable();
+    }
+
+    private void ShowAddModal()
+    {
+      // addEditPlayerModal.Show(new Player());
+    }
+
+   private void ShowEditModal(Player player)
+    {
+       // addEditPlayerModal.Show(player);
+    }
+
+    private void DeletePlayer(Player player)
+    {
+       PlayerService.Delete(player);
+        LoadPlayers();
+    }
+
+    private void RefreshList()
+    {
+        LoadPlayers();
+    }
+}

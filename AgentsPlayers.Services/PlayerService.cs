@@ -5,23 +5,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AgentsPlayers.Services
 {
-    public class PlayerService(IDbContextFactory<AgentsPlayersContext> dbContextFactory) : IPlayerService
+    public class PlayerService : IPlayerService
     {
-        private readonly IDbContextFactory<AgentsPlayersContext> _contextFactory = dbContextFactory;
-
-        public void Save(Player player)
+        private readonly IDbContextFactory<AgentsPlayersContext> _contextFactory;
+        public PlayerService(IDbContextFactory<AgentsPlayersContext> dbContextFactory)
+        {
+            _contextFactory = dbContextFactory;
+        }
+        public async Task Save(Player player)
         {
             using var db = _contextFactory.CreateDbContext();
             var tmp = db.Players.FirstOrDefault(x => x.Id == player.Id);
             if (tmp == null)
             {
                 db.Players.Add(player);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
 
         }
 
-        public void Update(Player player)
+        public async Task Update(Player player)
         {
             using var db = (_contextFactory.CreateDbContext());
 
@@ -44,11 +47,11 @@ namespace AgentsPlayers.Services
                 tmp.Languages = player.Languages;
 
 
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
         }
 
-        public void Delete(Player player)
+        public async Task Delete(Player player)
         {
             using var db = _contextFactory.CreateDbContext();
 
@@ -56,25 +59,33 @@ namespace AgentsPlayers.Services
             if (tmp != null)
             {
                 db.Players.Remove(tmp);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
         }
 
-        public Player Get(int id)
+        public async Task <Player> Get(int id)
         {
             using var db = _contextFactory.CreateDbContext();
 
-            var player = db.Players.FirstOrDefault(x => x.Id == id);
+            var player = await db.Players.FirstOrDefaultAsync(x => x.Id == id);
             return player;
         }
 
 
-        public List<Player> GetList(string FullName)
+        public async Task<List<Player>> GetList(string FullName)
         {
             using var db = _contextFactory.CreateDbContext();
 
-            var players = db.Players.Where(x => x.FullName.Contains(FullName));
+            var players = await db.Players.Where(x => x.FullName.Contains(FullName)).ToListAsync(); ;
             return [.. players];
         }
+
+        public async Task<List<Player>> GetAll()
+        {
+            using var db = _contextFactory.CreateDbContext();
+
+            return [.. await db.Players.Include(x => x.Agent).ToListAsync()];
+        }
+
     }
 }
