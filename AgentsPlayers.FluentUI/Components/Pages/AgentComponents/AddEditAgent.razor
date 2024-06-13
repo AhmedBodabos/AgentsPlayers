@@ -1,0 +1,124 @@
+﻿@using AgentsPlayers.Domain.Entities
+@using AgentsPlayers.FluentUI.Components.Pages.PlayerComponents
+@using AgentsPlayers.ServicesInterfaces
+@implements IDialogContentComponent
+@inject IAgentService AgentService
+@inject IPlayerService PlayerService
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+
+<FluentDialogHeader ShowDismiss="true">
+    <h5 class="modal-title">@((Content.Id == 0) ? "Add Agent" : "Edit Agent")</h5>
+</FluentDialogHeader>
+
+
+<FluentDialogBody>
+    <FluentGrid>
+        <FluentGridItem xs="12" md="8">
+            <FluentGrid>
+                <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <FluentTextField @bind-Value="@Content.FullName" style="width:100%">FullName</FluentTextField>
+                </FluentGridItem>
+                <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <FluentNumberField @bind-Value="@Content.PhoneNumber" style="width:100%">PhoneNumber</FluentNumberField>
+                </FluentGridItem>
+                <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <FluentTextField @bind-Value="@Content.EmailAddress" style="width:100%">EmailAddress</FluentTextField>
+                </FluentGridItem>
+                @* <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <FluentDatePicker @bind-Value="@Content.Experience" style="width:100%">Experience</FluentDatePicker>
+                </FluentGridItem> *@
+                <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <FluentListbox Items="AvailablePlayers"
+                                   OptionText="@(i=>i.FullName)"
+                                   OptionValue="@(i=>i.Id.ToString())"
+                                   @bind-SelectedOption="@SelectedPlayer"
+                                   style="width:100%"
+                                   Label="Available Players">
+                        <OptionTemplate>
+                            <FluentButton IconEnd="@(new Icons.Regular.Size16.AddCircle())"
+                                          @onclick="@(()=>AddToAgent(@context))" />
+                            @context.FullName
+                        </OptionTemplate>
+                    </FluentListbox>
+                </FluentGridItem>
+
+                <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <FluentListbox Items="Content.RepresentedPlayers"
+                                   OptionText="@(i=>i.FullName)"
+                                   OptionValue="@(i=>i.Id.ToString())"
+                                   @bind-SelectedOption="@SelectedPlayer"
+                                   style="width:100%"
+                                   Label="Agent's Players">
+                        <OptionTemplate>
+                            <FluentButton IconEnd="@(new Icons.Regular.Size16.Delete())"
+                                          @onclick="@(()=>RemoveFromAgent(@context))" />
+                            @context.FullName
+                        </OptionTemplate>
+
+                    </FluentListbox>
+                </FluentGridItem>
+            </FluentGrid>
+        </FluentGridItem>
+
+
+    </FluentGrid>
+
+</FluentDialogBody>
+
+<FluentDialogFooter>
+    <FluentButton Appearance="Appearance.Stealth" @onclick="Openplayers">Players</FluentButton>
+    <FluentButton Appearance="Appearance.Neutral" @onclick="Cancel">Cancel</FluentButton>
+    <FluentButton Appearance="Appearance.Accent" @onclick="SaveAsync">Save</FluentButton>
+</FluentDialogFooter>
+
+@code {
+
+    [Parameter] public EventCallback OnSave { get; set; }
+    [Parameter] public Agent Content { get; set; } = new();
+    [CascadingParameter] public FluentDialog Dialog { get; set; }
+
+    public Player SelectedPlayer { get; set; } = new();
+    public List<Player> AvailablePlayers { get; set; } = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        AvailablePlayers = await PlayerService.GetAll();
+    }
+    private async Task SaveAsync()
+    {
+        if (Content.Id == 0)
+        {
+            await AgentService.Save(Content);
+        }
+        else
+        {
+            await AgentService.Update(Content);
+        }
+        await OnSave.InvokeAsync();
+        await Dialog.CloseAsync(Content);
+    }
+    private async void Cancel()
+    {
+        await Dialog.CloseAsync();
+    }
+
+    private async void AddToAgent(Player player)
+    {
+        await AgentService.AddPlayerToAgent(Content, player);
+        Content.RepresentedPlayers.Add(player);
+        StateHasChanged();
+
+    }
+    private async void RemoveFromAgent(Player player)
+    {
+        await AgentService.RemovePlayerFromAgent(Content, player);
+        Content.RepresentedPlayers.Remove(player);
+        StateHasChanged();
+
+    }
+    private void Openplayers()
+    {
+        NavigationManager.NavigateTo("/players");
+    }
+}

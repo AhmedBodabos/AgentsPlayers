@@ -86,6 +86,5 @@ namespace AgentsPlayers.Services
 
             return [.. await db.Players.Include(x => x.Agent).ToListAsync()];
         }
-
     }
 }

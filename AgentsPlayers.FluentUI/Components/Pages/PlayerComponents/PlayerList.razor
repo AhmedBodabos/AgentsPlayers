@@ -1,5 +1,6 @@
 ﻿@page "/Players"
 @rendermode InteractiveServer
+@inject IDialogService DialogService
 
 @using AgentsPlayers.Domain.Entities
 @using AgentsPlayers.ServicesInterfaces
@@ -17,11 +18,15 @@
 
 else
 {
-      <FluentDataGrid Items="@players"> 
+    <FluentDataGrid Items="@players"
+        GenerateHeader="GenerateHeaderOption.Sticky"
+                    ResizableColumns=true
+                    Pagination="@pagination"
+                    Style="width: 100%; height: 500px;overflow:auto;">
+
         <PropertyColumn Property="@(p=>p.FullName)" Sortable="true" />
         <PropertyColumn Property="@(p=>p.DateOfBirth)" Sortable="true" />
         <PropertyColumn Property="@(p=>p.Nationality)" Sortable="true" />
-        <PropertyColumn Property="@(p=>p.Position)" Sortable="true" />
         <PropertyColumn Property="@(p=>p.Position)" Sortable="true" />
         <PropertyColumn Property="@(p=>p.Height)" Sortable="true" />
         <PropertyColumn Property="@(p=>p.Weight)" Sortable="true" />
@@ -34,50 +39,69 @@ else
         <PropertyColumn Property="@(p=>p.HealthStatus)" Sortable="true" />
         <PropertyColumn Property="@(p=>p.Languages)" Sortable="true" />
              <TemplateColumn Title="Actions" Align="@Align.End">
-        <FluentButton aria-label="Edit item" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => ShowEditModal(context))" />
+            <FluentButton aria-label="Edit item" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => OpenDialogAsync(context))" />
         <FluentButton aria-label="Delete item" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => DeletePlayer(context))" />
        
         </TemplateColumn>
 
     </FluentDataGrid>
-
+    <FluentPaginator State="@pagination" />
 }
-@* <AddEditPlayerModal @ref="addEditPlayerModal" OnSave="RefreshList" /> *@
 
 @code {
     [Inject] IPlayerService PlayerService { get; set; }
 
     private IQueryable<Player> players;
-    //private AddEditPlayerModal addEditPlayerModal;
-
-    protected override void OnInitialized()
+    private AddEditPlayerDialog addEditBookDialog;
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+    protected override async Task OnInitializedAsync()
     {
-        LoadPlayers();
+        await LoadPlayers();
     }
 
     private async Task LoadPlayers()
     {
         players = (await PlayerService.GetAll()).AsQueryable();
+        StateHasChanged();
+    }
+    private async Task OpenDialogAsync(Player player)
+    {
+        DialogParameters parameters = new DialogParameters()
+            {
+                Title = ((player.Id == 0) ? "Add Player" : "Edit Player"),
+                PrimaryAction = "Yes",
+                PrimaryActionEnabled = false,
+                SecondaryAction = "No",
+                Width = "2000px",
+                TrapFocus = true,
+                Modal = true,
+                PreventScroll = true
+            };
+        var dialog = await DialogService.ShowDialogAsync<AddEditPlayerDialog>(player, parameters);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled && result.Data != null)
+        {
+            player = (Player)result.Data;
+            LoadPlayers();
+        }
+
     }
 
-    private void ShowAddModal()
+
+    private async Task ShowAddModal()
     {
-      // addEditPlayerModal.Show(new Player());
+        await OpenDialogAsync(new Player());
     }
 
-   private void ShowEditModal(Player player)
+    private async void DeletePlayer(Player player)
     {
-       // addEditPlayerModal.Show(player);
+       await PlayerService.Delete(player);
+        await LoadPlayers();
     }
 
-    private void DeletePlayer(Player player)
+    private async void RefreshList()
     {
-       PlayerService.Delete(player);
-        LoadPlayers();
-    }
-
-    private void RefreshList()
-    {
-        LoadPlayers();
+      await LoadPlayers();
     }
 }

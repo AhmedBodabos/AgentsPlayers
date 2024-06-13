@@ -67,7 +67,46 @@ namespace AgentsPlayers.Services
             var agents = db.Agents.Where(x => x.FullName.Contains(FullName));
             return [..await agents.ToListAsync()];
         }
+        public async Task<List<Agent>> GetAll()
+        {
+            using var db = _contextFactory.CreateDbContext();
 
-        
+            return [.. await db.Agents.Include(x => x.RepresentedPlayers).ToListAsync()];
+        }
+        public async Task AddPlayerToAgent(Agent agent, Player player)
+        {
+            using var db = _contextFactory.CreateDbContext();
+            var tmpAgent = db.Agents.Include(x => x.RepresentedPlayers).FirstOrDefault(x => x.Id == agent.Id);
+            if (tmpAgent != null)
+            {
+                var tmpPlayer = db.Players.FirstOrDefault(x => x.Id == player.Id);
+                if (tmpPlayer != null)
+                {
+                    tmpAgent.RepresentedPlayers.Add(tmpPlayer);
+                }
+                else
+                {
+                    db.Players.Add(player);
+                    await db.SaveChangesAsync();
+                    tmpAgent.RepresentedPlayers.Add(player);
+                }
+                await db.SaveChangesAsync();
+            }
+        }
+
+        public async Task RemovePlayerFromAgent(Agent agent , Player player)
+        {
+            using var db = _contextFactory.CreateDbContext();
+            var tmpAgent = db.Agents.Include(x => x.RepresentedPlayers).FirstOrDefault(x => x.Id == agent.Id);
+            if (tmpAgent != null)
+            {
+                var agentPlayer = tmpAgent.RepresentedPlayers.FirstOrDefault(x => x.Id == player.Id);
+                if (agentPlayer != null)
+                {
+                    tmpAgent.RepresentedPlayers.Remove(agentPlayer);
+                    await db.SaveChangesAsync();
+                }
+            }
+        }
     }
 }
