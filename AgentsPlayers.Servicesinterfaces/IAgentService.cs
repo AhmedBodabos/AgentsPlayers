@@ -9,5 +9,8 @@ namespace AgentsPlayers.ServicesInterfaces
        Task <List<Agent>> GetList(string FullName);
         Task Save(Agent agent);
         Task Update(Agent agent);
+        Task<List<Agent>> GetAll();
+        Task AddPlayerToAgent(Agent agent, Player player);
+        Task RemovePlayerFromAgent(Agent agent, Player player);
     }
 }

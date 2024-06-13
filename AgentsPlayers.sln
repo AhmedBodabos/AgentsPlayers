@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgentsPlayers.Services", "A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgentsPlayers.Servicesinterfaces", "AgentsPlayers.Servicesinterfaces\AgentsPlayers.Servicesinterfaces.csproj", "{CD5A0D10-A07D-4416-A3CE-52F6B7F768EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgentsPlayers.FluentUI", "AgentsPlayers.FluentUI\AgentsPlayers.FluentUI.csproj", "{F382D6E2-1A71-47E4-B83F-542748DABBDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgentsPlayers.FluentUI", "AgentsPlayers.FluentUI\AgentsPlayers.FluentUI.csproj", "{F382D6E2-1A71-47E4-B83F-542748DABBDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
