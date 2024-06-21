@@ -30,7 +30,7 @@ namespace AgentsPlayers.Tests.IntegrationTests
             var options = CreateNewContextOptions();
             var factory = GetDbContextFactoryAsync(options);
             var service = new PlayerService(factory);
-            var player = new Player { FullName = "Player1", Nationality = "England", Position = "ST" , Height  = 1.80 , Weight = 70 , MarketValue = 5000000, PreferredFoot = "Right" , CurrentClub  = "Everton" , HealthStatus  = "good"};
+            var player = new Player { FullName = "Player1", Nationality = "England", Position = "ST" , Height  = 1.80 , Weight = 70 , MarketValue = 5000000, PreferredFoot = "Right" , CurrentClub  = "Everton" , HealthStatus  = "good", AwardsAndAchievements = new List<string> { "La Liga" }, Languages = new List<string> { "English" } };
 
             // Act استدعاء الدالة
             await service.Save(player);
@@ -47,7 +47,7 @@ namespace AgentsPlayers.Tests.IntegrationTests
             var options = CreateNewContextOptions();
             var factory = GetDbContextFactoryAsync(options);
             var service = new PlayerService(factory);
-            var player = new Player { FullName = "Player1", Nationality = "England", Position = "ST", Height = 1.80, Weight = 70, MarketValue = 5000000, PreferredFoot = "Right", CurrentClub = "Everton", HealthStatus = "good" };
+            var player = new Player { FullName = "Player1", Nationality = "England", Position = "ST", Height = 1.80, Weight = 70, MarketValue = 5000000, PreferredFoot = "Right", CurrentClub = "Everton", HealthStatus = "good", AwardsAndAchievements = new List<string> { "La Liga" }, Languages = new List<string> { "English" } };
             await service.Save(player);
 
             // Act
@@ -64,8 +64,8 @@ namespace AgentsPlayers.Tests.IntegrationTests
             var options = CreateNewContextOptions();
             var factory = GetDbContextFactoryAsync(options);
             var service = new PlayerService(factory);
-            await service.Save(new Player { FullName = "Player1", Nationality = "England", Position = "ST", Height = 1.80, Weight = 70, MarketValue = 5000000, PreferredFoot = "Right", CurrentClub = "Everton", HealthStatus = "good" });
-            await service.Save(new Player { FullName = "Player2", Nationality = "England", Position = "ST", Height = 1.80, Weight = 70, MarketValue = 5000000, PreferredFoot = "Right", CurrentClub = "Everton", HealthStatus = "good" });
+            await service.Save(new Player { FullName = "Player1", Nationality = "England", Position = "ST", Height = 1.80, Weight = 70, MarketValue = 5000000, PreferredFoot = "Right", CurrentClub = "Everton", HealthStatus = "good", AwardsAndAchievements = new List<string> { "La Liga" }, Languages = new List<string> { "English" } });
+            await service.Save(new Player { FullName = "Player2", Nationality = "England", Position = "ST", Height = 1.80, Weight = 70, MarketValue = 5000000, PreferredFoot = "Right", CurrentClub = "Everton", HealthStatus = "good", AwardsAndAchievements = new List<string> { "La Liga" }, Languages = new List<string> { "English" } });
 
             // Act
             var players = await service.GetList("Player");
@@ -80,8 +80,8 @@ namespace AgentsPlayers.Tests.IntegrationTests
             var options = CreateNewContextOptions();
             var factory = GetDbContextFactoryAsync(options);
             var service = new PlayerService(factory);
-            await service.Save(new Player { FullName = "Player1", Nationality = "England", Position = "ST", Height = 1.80, Weight = 70, MarketValue = 5000000, PreferredFoot = "Right", CurrentClub = "Everton", HealthStatus = "good" });
-            await service.Save(new Player { FullName = "Player2", Nationality = "England", Position = "ST", Height = 1.80, Weight = 70, MarketValue = 5000000, PreferredFoot = "Right", CurrentClub = "Everton", HealthStatus = "good" });
+            await service.Save(new Player { FullName = "Player1", Nationality = "England", Position = "ST", Height = 1.80, Weight = 70, MarketValue = 5000000, PreferredFoot = "Right", CurrentClub = "Everton", HealthStatus = "good", AwardsAndAchievements = new List<string> { "La Liga" }, Languages = new List<string> { "English" } });
+            await service.Save(new Player { FullName = "Player2", Nationality = "England", Position = "ST", Height = 1.80, Weight = 70, MarketValue = 5000000, PreferredFoot = "Right", CurrentClub = "Everton", HealthStatus = "good", AwardsAndAchievements = new List<string> { "La Liga" }, Languages = new List<string> { "English" } });
 
             // Act
             var players = await service.GetAll();
@@ -96,7 +96,7 @@ namespace AgentsPlayers.Tests.IntegrationTests
             var options = CreateNewContextOptions();
             var factory = GetDbContextFactoryAsync(options);
             var service = new PlayerService(factory);
-            var player = new Player { FullName = "Player1", Nationality = "England", Position = "ST", Height = 1.80, Weight = 70, MarketValue = 5000000, PreferredFoot = "Right", CurrentClub = "Everton", HealthStatus = "good", DateOfBirth = DateTime.Now, ContractExpirationDate = DateTime.Now, Languages = { "d", "d" } , AwardsAndAchievements = { "d","d"} };
+            var player = new Player { FullName = "Player1", Nationality = "England", Position = "ST", Height = 1.80, Weight = 70, MarketValue = 5000000, PreferredFoot = "Right", CurrentClub = "Everton", HealthStatus = "good", DateOfBirth = DateTime.Now, ContractExpirationDate = DateTime.Now, AwardsAndAchievements = new List<string> { "La Liga" }, Languages = new List<string> { "English" } };
             await service.Save(player);
 
             // Act
@@ -114,7 +114,7 @@ namespace AgentsPlayers.Tests.IntegrationTests
             var options = CreateNewContextOptions();
             var factory = GetDbContextFactoryAsync(options);
             var service = new PlayerService(factory);
-            var player = new Player { FullName = "Player1", Nationality = "England", Position = "ST", Height = 1.80, Weight = 70, MarketValue = 5000000, PreferredFoot = "Right", CurrentClub = "Everton", HealthStatus = "good" };
+            var player = new Player { FullName = "Player1", Nationality = "England", Position = "ST", Height = 1.80, Weight = 70, MarketValue = 5000000, PreferredFoot = "Right", CurrentClub = "Everton", HealthStatus = "good", AwardsAndAchievements = new List<string> { "La Liga" }, Languages = new List<string> { "English" } };
             await service.Save(player);
 
             // Act
@@ -127,7 +127,8 @@ namespace AgentsPlayers.Tests.IntegrationTests
             player.PreferredFoot = "Left";
             player.CurrentClub = "Aston Villa";
             player.HealthStatus = "Bad";
-
+            player.AwardsAndAchievements = new List<string> { "La Liga" };
+            player.Languages = new List<string> { "English" };
             await service.Update(player);
 
             // Assert
@@ -142,7 +143,9 @@ namespace AgentsPlayers.Tests.IntegrationTests
             Assert.Equal("Left", updatedPlayer.PreferredFoot);
             Assert.Equal("Aston Villa", updatedPlayer.CurrentClub);
             Assert.Equal("Bad", updatedPlayer.HealthStatus);
-            
+            Assert.Equal(new List<string> { "Premier League" }, updatedPlayer.AwardsAndAchievements); // التحقق من الجوائز والإنجازات
+            Assert.Equal(new List<string> { "Arabic", "English" }, updatedPlayer.Languages); // التحقق من اللغات
+
         }
     }
 }
