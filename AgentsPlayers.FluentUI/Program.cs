@@ -8,7 +8,11 @@ using Microsoft.FluentUI.AspNetCore.Components;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContextFactory<AgentsPlayersContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection"), opt=>
+opt.EnableRetryOnFailure(
+    maxRetryCount:5,
+    maxRetryDelay: TimeSpan.FromSeconds(30),
+    errorNumbersToAdd: null)));
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
