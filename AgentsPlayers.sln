@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgentsPlayers.Servicesinter
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgentsPlayers.FluentUI", "AgentsPlayers.FluentUI\AgentsPlayers.FluentUI.csproj", "{F382D6E2-1A71-47E4-B83F-542748DABBDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgentsPlayers.Tests", "AgentsPlayers.Tests\AgentsPlayers.Tests.csproj", "{52902E32-A8CF-49DC-92A9-0FEFBBD6FE24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgentsPlayers.Tests", "AgentsPlayers.Tests\AgentsPlayers.Tests.csproj", "{52902E32-A8CF-49DC-92A9-0FEFBBD6FE24}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

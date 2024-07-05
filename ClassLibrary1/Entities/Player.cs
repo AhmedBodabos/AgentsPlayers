@@ -20,10 +20,12 @@ namespace AgentsPlayers.Domain.Entities
         public string PreferredFoot { get; set; }
         public DateTime ContractExpirationDate { get; set; }
         public string CurrentClub { get; set; }
+        
+        public int AgentId { get; set; }
         public Agent Agent { get; set; }
-        public List<string> AwardsAndAchievements { get; set; }
+        public List<string> AwardsAndAchievements { get; set; } = new List<string>();
         public string HealthStatus { get; set; }
-        public List<string> Languages { get; set; }
+        public List<string> Languages { get; set; } = new List<string>();
     }
 }
 

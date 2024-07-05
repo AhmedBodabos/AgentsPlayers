@@ -16,9 +16,11 @@
                 <FluentGridItem xs="12" sm="6" md="6" lg="6">
                     <FluentTextField @bind-Value="@Content.FullName" style="width:100%">FullName</FluentTextField>
                 </FluentGridItem>
-                @* <FluentGridItem xs="12" sm="6" md="6" lg="6">
-                    <FluentDatePicker @bind-Value="@Content.DateOfBirth" style="width:100%">DateOfBirth</FluentDatePicker>
-                </FluentGridItem> *@
+
+                <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <FluentDatePicker Value="Content.DateOfBirth" style="width:100%">DateOfBirth</FluentDatePicker>
+                </FluentGridItem>
+               
                 <FluentGridItem xs="12" sm="6" md="6" lg="6">
                     <FluentTextField @bind-Value="@Content.Nationality" style="width:100%">Nationality</FluentTextField>
                 </FluentGridItem>
@@ -37,21 +39,37 @@
                 <FluentGridItem xs="12" sm="6" md="6" lg="6">
                     <FluentTextField @bind-Value="@Content.PreferredFoot" style="width:100%">PreferredFoot</FluentTextField>
                 </FluentGridItem>
-                @* <FluentGridItem xs="12" sm="6" md="6" lg="6">
-                    <FluentTextField @bind-Value="@Content.ContractExpirationDate" style="width:100%">ContractExpirationDate</FluentTextField>
-                </FluentGridItem> *@
+
+                <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <FluentDatePicker Value="Content.ContractExpirationDate" style="width:100%">ContractExpirationDate</FluentDatePicker>
+                </FluentGridItem>
+                
                 <FluentGridItem xs="12" sm="6" md="6" lg="6">
                     <FluentTextField @bind-Value="@Content.CurrentClub" style="width:100%">CurrentClub</FluentTextField>
                 </FluentGridItem>
-                @* <FluentGridItem xs="12" sm="6" md="6" lg="6">
-                    <FluentTextField @bind-Value="@Content.AwardsAndAchievements" style="width:100%">AwardsAndAchievements</FluentTextField>
-                </FluentGridItem> *@
+                <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <InputSelect @bind-Value="SelectedAwards" multiple style="width:100%">
+                        @foreach (var award in AvailableAwards)
+                        {
+                            <option value="@award">@award</option>
+                        }
+                    </InputSelect>
+                </FluentGridItem>
                 <FluentGridItem xs="12" sm="6" md="6" lg="6">
                     <FluentTextField @bind-Value="@Content.HealthStatus" style="width:100%">HealthStatus</FluentTextField>
                 </FluentGridItem>
-               @*  <FluentGridItem xs="12" sm="6" md="6" lg="6">
-                    <FluentTextField @bind-Value="@Content.Languages" style="width:100%">Languages</FluentTextField>
-                </FluentGridItem> *@
+                <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <FluentNumberField @bind-Value="@Content.AgentId" style="width:100%">Agent Id</FluentNumberField>
+                </FluentGridItem>
+
+                <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <InputSelect @bind-Value="SelectedLanguages" multiple style="width:100%">
+                        @foreach (var language in AvailableLanguages)
+                        {
+                            <option value="@language">@language</option>
+                        }
+                    </InputSelect>
+                </FluentGridItem>
             </FluentGrid>
         </FluentGridItem>
 
@@ -69,6 +87,10 @@
     [Parameter] public Player Content { get; set; } = new();
     [CascadingParameter] public FluentDialog Dialog { get; set; }
 
+    private List<string> AvailableLanguages = new List<string> { "English", "Spanish", "French", "German", "Chinese", "Japanese" };
+    private List<string> AvailableAwards = new List<string> { "MVP", "Top Scorer", "Best Player", "Champion", "Best Goalkeeper" };
+    private List<string> SelectedLanguages { get; set; } = new List<string>();
+    private List<string> SelectedAwards { get; set; } = new List<string>();
 
     private async Task SaveAsync()
     {

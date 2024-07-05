@@ -25,9 +25,9 @@
                 <FluentGridItem xs="12" sm="6" md="6" lg="6">
                     <FluentTextField @bind-Value="@Content.EmailAddress" style="width:100%">EmailAddress</FluentTextField>
                 </FluentGridItem>
-                @* <FluentGridItem xs="12" sm="6" md="6" lg="6">
-                    <FluentDatePicker @bind-Value="@Content.Experience" style="width:100%">Experience</FluentDatePicker>
-                </FluentGridItem> *@
+                <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    <FluentDatePicker Value="Content.Experience" style="width:100%">Experience</FluentDatePicker>
+                </FluentGridItem>
                 <FluentGridItem xs="12" sm="6" md="6" lg="6">
                     <FluentListbox Items="AvailablePlayers"
                                    OptionText="@(i=>i.FullName)"
