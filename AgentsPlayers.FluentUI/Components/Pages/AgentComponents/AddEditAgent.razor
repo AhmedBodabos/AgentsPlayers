@@ -26,38 +26,10 @@
                     <FluentTextField @bind-Value="@Content.EmailAddress" style="width:100%">EmailAddress</FluentTextField>
                 </FluentGridItem>
                 <FluentGridItem xs="12" sm="6" md="6" lg="6">
+                    Experience
                     <FluentDatePicker Value="Content.Experience" style="width:100%">Experience</FluentDatePicker>
                 </FluentGridItem>
-                <FluentGridItem xs="12" sm="6" md="6" lg="6">
-                    <FluentListbox Items="AvailablePlayers"
-                                   OptionText="@(i=>i.FullName)"
-                                   OptionValue="@(i=>i.Id.ToString())"
-                                   @bind-SelectedOption="@SelectedPlayer"
-                                   style="width:100%"
-                                   Label="Available Players">
-                        <OptionTemplate>
-                            <FluentButton IconEnd="@(new Icons.Regular.Size16.AddCircle())"
-                                          @onclick="@(()=>AddToAgent(@context))" />
-                            @context.FullName
-                        </OptionTemplate>
-                    </FluentListbox>
-                </FluentGridItem>
-
-                <FluentGridItem xs="12" sm="6" md="6" lg="6">
-                    <FluentListbox Items="Content.RepresentedPlayers"
-                                   OptionText="@(i=>i.FullName)"
-                                   OptionValue="@(i=>i.Id.ToString())"
-                                   @bind-SelectedOption="@SelectedPlayer"
-                                   style="width:100%"
-                                   Label="Agent's Players">
-                        <OptionTemplate>
-                            <FluentButton IconEnd="@(new Icons.Regular.Size16.Delete())"
-                                          @onclick="@(()=>RemoveFromAgent(@context))" />
-                            @context.FullName
-                        </OptionTemplate>
-
-                    </FluentListbox>
-                </FluentGridItem>
+         
             </FluentGrid>
         </FluentGridItem>
 
@@ -78,13 +50,6 @@
     [Parameter] public Agent Content { get; set; } = new();
     [CascadingParameter] public FluentDialog Dialog { get; set; }
 
-    public Player SelectedPlayer { get; set; } = new();
-    public List<Player> AvailablePlayers { get; set; } = [];
-
-    protected override async Task OnInitializedAsync()
-    {
-        AvailablePlayers = await PlayerService.GetAll();
-    }
     private async Task SaveAsync()
     {
         if (Content.Id == 0)
@@ -103,20 +68,6 @@
         await Dialog.CloseAsync();
     }
 
-    private async void AddToAgent(Player player)
-    {
-        await AgentService.AddPlayerToAgent(Content, player);
-        Content.RepresentedPlayers.Add(player);
-        StateHasChanged();
-
-    }
-    private async void RemoveFromAgent(Player player)
-    {
-        await AgentService.RemovePlayerFromAgent(Content, player);
-        Content.RepresentedPlayers.Remove(player);
-        StateHasChanged();
-
-    }
     private void Openplayers()
     {
         NavigationManager.NavigateTo("/players");

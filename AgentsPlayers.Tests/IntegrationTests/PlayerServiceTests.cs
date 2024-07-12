@@ -76,24 +76,8 @@ namespace AgentsPlayers.Tests.IntegrationTests
             Assert.Equal(2, players.Count);
         }
         [Fact]
-        public async Task GetAll_ShouldReturnAllPlayers()
-        {
-            // Arrange
-            var options = CreateNewContextOptions();
-            var factory = GetDbContextFactoryAsync(options);
-            var service = new PlayerService(factory);
-
-            // حفظ اللاعبين
-            await service.Save(new Player { FullName = "Player1", Nationality = "England", Position = "ST", Height = 1.80, Weight = 70, MarketValue = 5000000, PreferredFoot = "Right", CurrentClub = "Everton", HealthStatus = "good", AwardsAndAchievements = new List<string> { "La Liga" }, Languages = new List<string> { "English" } });
-            await service.Save(new Player { FullName = "Player2", Nationality = "England", Position = "ST", Height = 1.80, Weight = 70, MarketValue = 5000000, PreferredFoot = "Right", CurrentClub = "Everton", HealthStatus = "good", AwardsAndAchievements = new List<string> { "La Liga" }, Languages = new List<string> { "English" } });
-
-            // Act
-            var players = await service.GetAll();
-
-            // Assert
-            Assert.Equal(2, players.Count);
-        }
-        [Fact]
+       
+       
         public async Task Delete_ShouldRemovePlayer()
         {
             // Arrange

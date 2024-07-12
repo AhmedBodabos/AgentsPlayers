@@ -18,12 +18,14 @@
 
 else
 {
+    <div style="overflow: auto;">
     <FluentDataGrid Items="@players"
         GenerateHeader="GenerateHeaderOption.Sticky"
                     ResizableColumns=true
                     Pagination="@pagination"
-                    Style="width: 100%; height: 500px;overflow:auto;">
+                    Style="width:200%; height: 500px;overflow:auto;">
 
+        <PropertyColumn Property="@(p=>p.Agent.Id)" Sortable="true"  Title="Agent ID"/>
         <PropertyColumn Property="@(p=>p.FullName)" Sortable="true" />
         <PropertyColumn Property="@(p=>p.DateOfBirth)" Sortable="true" />
         <PropertyColumn Property="@(p=>p.Nationality)" Sortable="true" />
@@ -34,10 +36,10 @@ else
         <PropertyColumn Property="@(p=>p.PreferredFoot)" Sortable="true" />
         <PropertyColumn Property="@(p=>p.ContractExpirationDate)" Sortable="true" />
         <PropertyColumn Property="@(p=>p.CurrentClub)" Sortable="true" />
-        <PropertyColumn Property="@(p=>p.Agent)" Sortable="true" />
-        <PropertyColumn Property="@(p=>p.AwardsAndAchievements)" Sortable="true" />
+        <PropertyColumn Property="@(p=>p.Agent.FullName)" Sortable="true" Title="Agent Name" />
+        
         <PropertyColumn Property="@(p=>p.HealthStatus)" Sortable="true" />
-        <PropertyColumn Property="@(p=>p.Languages)" Sortable="true" />
+        
              <TemplateColumn Title="Actions" Align="@Align.End">
             <FluentButton aria-label="Edit item" IconEnd="@(new Icons.Regular.Size16.Edit())" OnClick="@(() => OpenDialogAsync(context))" />
         <FluentButton aria-label="Delete item" IconEnd="@(new Icons.Regular.Size16.Delete())" OnClick="@(() => DeletePlayer(context))" />
@@ -46,6 +48,7 @@ else
 
     </FluentDataGrid>
     <FluentPaginator State="@pagination" />
+    </div>
 }
 
 @code {
