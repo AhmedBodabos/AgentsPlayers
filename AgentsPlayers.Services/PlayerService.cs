@@ -85,6 +85,7 @@ namespace AgentsPlayers.Services
             using var db = _contextFactory.CreateDbContext();
 
             return [.. await db.Players.Include(x => x.Agent).ToListAsync()];
+
         }
     }
 }

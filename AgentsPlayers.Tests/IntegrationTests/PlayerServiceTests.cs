@@ -2,6 +2,8 @@
 using AgentsPlayers.Persistance;
 using AgentsPlayers.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace AgentsPlayers.Tests.IntegrationTests
@@ -80,6 +82,8 @@ namespace AgentsPlayers.Tests.IntegrationTests
             var options = CreateNewContextOptions();
             var factory = GetDbContextFactoryAsync(options);
             var service = new PlayerService(factory);
+
+            // حفظ اللاعبين
             await service.Save(new Player { FullName = "Player1", Nationality = "England", Position = "ST", Height = 1.80, Weight = 70, MarketValue = 5000000, PreferredFoot = "Right", CurrentClub = "Everton", HealthStatus = "good", AwardsAndAchievements = new List<string> { "La Liga" }, Languages = new List<string> { "English" } });
             await service.Save(new Player { FullName = "Player2", Nationality = "England", Position = "ST", Height = 1.80, Weight = 70, MarketValue = 5000000, PreferredFoot = "Right", CurrentClub = "Everton", HealthStatus = "good", AwardsAndAchievements = new List<string> { "La Liga" }, Languages = new List<string> { "English" } });
 
@@ -119,12 +123,14 @@ namespace AgentsPlayers.Tests.IntegrationTests
 
             // Act
             player.FullName = "Updated Player";
+            player.DateOfBirth = new DateTime(1990, 1, 1);
             player.Nationality = "Libya";
             player.Position = "LW";
             player.Height = 1.79;
             player.Weight = 90;
             player.MarketValue = 7500000;
             player.PreferredFoot = "Left";
+            player.ContractExpirationDate = new DateTime(2025, 1, 1);
             player.CurrentClub = "Aston Villa";
             player.HealthStatus = "Bad";
             player.AwardsAndAchievements = new List<string> { "La Liga" };
@@ -135,16 +141,18 @@ namespace AgentsPlayers.Tests.IntegrationTests
             using var context = new AgentsPlayersContext(options);
             var updatedPlayer = await context.Players.FindAsync(player.Id);
             Assert.Equal("Updated Player", updatedPlayer.FullName);
+            Assert.Equal(new DateTime(1990, 1, 1) , updatedPlayer.DateOfBirth);
             Assert.Equal("Libya", updatedPlayer.Nationality);
             Assert.Equal("LW", updatedPlayer.Position);
             Assert.Equal(1.79, updatedPlayer.Height);
             Assert.Equal(90, updatedPlayer.Weight);
             Assert.Equal(7500000, updatedPlayer.MarketValue);
             Assert.Equal("Left", updatedPlayer.PreferredFoot);
+            Assert.Equal(new DateTime(2025, 1, 1), updatedPlayer.ContractExpirationDate);
             Assert.Equal("Aston Villa", updatedPlayer.CurrentClub);
             Assert.Equal("Bad", updatedPlayer.HealthStatus);
-            Assert.Equal(new List<string> { "Premier League" }, updatedPlayer.AwardsAndAchievements); // التحقق من الجوائز والإنجازات
-            Assert.Equal(new List<string> { "Arabic", "English" }, updatedPlayer.Languages); // التحقق من اللغات
+            Assert.Equal(new List<string> { "La Liga" }, updatedPlayer.AwardsAndAchievements); // التحقق من الجوائز والإنجازات
+            Assert.Equal(new List<string> { "English" }, updatedPlayer.Languages); // التحقق من اللغات
 
         }
     }
