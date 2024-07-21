@@ -54,6 +54,10 @@
     {
         if (Content.Id == 0)
         {
+            if (await AgentService.IsNameExists(Content))
+            {
+                return;
+            }
             await AgentService.Save(Content);
         }
         else

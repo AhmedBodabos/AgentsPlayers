@@ -10,6 +10,8 @@ namespace AgentsPlayers.ServicesInterfaces
         Task Save(Agent agent);
         Task Update(Agent agent);
         Task<List<Agent>> GetAll();
+        public Task<bool> IsNameExists(Agent agent);
+
         Task AddPlayerToAgent(Agent agent, Player player);
         Task RemovePlayerFromAgent(Agent agent, Player player);
     }

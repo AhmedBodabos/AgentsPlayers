@@ -12,6 +12,7 @@ namespace AgentsPlayers.Domain.Entities
     {
         public int Id { get; set; }
         [MaxLength(60)]
+        public string Title{ get; set; }
         public string FullName { get; set; }
         [MaxLength(24)]
         public double PhoneNumber { get; set; }
